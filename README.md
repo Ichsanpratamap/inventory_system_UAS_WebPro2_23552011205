@@ -1,167 +1,68 @@
-# inventory_system_UAS_WebPro2_23552011205
+# Lab Inventory System - UAS Web Programming 2
 
-# Inventory System
+## Deskripsi Aplikasi
 
-## Deskripsi
+**Inventory System** adalah aplikasi berbasis web yang digunakan untuk mengelola data inventaris barang laboratorium atau instansi. Aplikasi ini dibangun menggunakan **React.js** sebagai frontend, **Node.js + Express.js** sebagai backend, serta **PostgreSQL** sebagai database.
 
-Inventory System adalah aplikasi berbasis web yang digunakan untuk mengelola data inventaris barang. Aplikasi ini memiliki fitur autentikasi pengguna, manajemen data barang, pembuatan QR Code untuk setiap barang, pemindaian QR Code, serta sistem peminjaman barang.
+Aplikasi menyediakan fitur autentikasi menggunakan **JSON Web Token (JWT)** sehingga hanya pengguna yang telah login yang dapat mengakses sistem.
 
-Project ini dikembangkan menggunakan arsitektur **Frontend (React + Vite)** dan **Backend (Express.js + PostgreSQL)** dengan autentikasi menggunakan **JSON Web Token (JWT)**.
+### Fitur Aplikasi
 
----
-
-## Fitur
-
-### Authentication
-
-* Login
-* Register
-* JWT Authentication
-* Protected Route
-
-### Dashboard
-
-* Menampilkan seluruh data inventaris
-* Statistik jumlah barang
-* Pencarian barang
-* Tambah barang
-* Edit barang
-* Hapus barang
-
-### Inventory
-
-* Kode Barang
-* Nama Barang
-* Kategori
-* Kondisi
-* Lokasi
-* Jumlah Barang
-* Status Barang
-
-### QR Code
-
-* Generate QR Code otomatis saat barang ditambahkan
-* Scan QR Code menggunakan kamera
-* Menampilkan detail barang dari hasil scan
-
-### Borrowing
-
-* Peminjaman barang
-* Perubahan status barang menjadi **Borrowed**
-* Penyimpanan riwayat peminjaman
+- Login menggunakan JWT Authentication
+- Dashboard Inventaris
+- Menambah data barang
+- Mengubah data barang
+- Menghapus data barang
+- Mencari data barang
+- Melihat detail barang
+- Generate QR Code untuk setiap barang
+- Scan QR Code
+- Peminjaman (Borrow Item)
+- Penyimpanan data menggunakan PostgreSQL
 
 ---
 
 # Teknologi yang Digunakan
 
-## Frontend
+### Frontend
 
-* React
-* Vite
-* React Router DOM
-* Axios
-* Tailwind CSS
-* html5-qrcode
+- React.js
+- React Router DOM
+- Axios
+- Tailwind CSS
+- html5-qrcode
 
-## Backend
+### Backend
 
-* Node.js
-* Express.js
-* PostgreSQL
-* JWT
-* bcrypt
-* QRCode
+- Node.js
+- Express.js
+- JSON Web Token (JWT)
+- bcrypt
+- PostgreSQL
 
----
+### Database
 
-# Struktur Project
-
-```text
-inventory-system
-│
-├── backend
-│   ├── src
-│   │   ├── config
-│   │   ├── controllers
-│   │   ├── middleware
-│   │   ├── routes
-│   │   ├── server.js
-│   │   └── ...
-│   │
-│   ├── package.json
-│   └── .env
-│
-├── frontend
-│   ├── src
-│   │   ├── components
-│   │   ├── pages
-│   │   ├── services
-│   │   ├── App.jsx
-│   │   └── ...
-│   │
-│   └── package.json
-│
-└── README.md
-```
+- PostgreSQL
 
 ---
 
-# Database
+# Cara Menjalankan Aplikasi
 
-## users
-
-| Field      | Type      |
-| ---------- | --------- |
-| id         | SERIAL    |
-| name       | VARCHAR   |
-| email      | VARCHAR   |
-| password   | VARCHAR   |
-| role       | VARCHAR   |
-| created_at | TIMESTAMP |
-
----
-
-## items
-
-| Field      | Type      |
-| ---------- | --------- |
-| id         | SERIAL    |
-| code       | VARCHAR   |
-| name       | VARCHAR   |
-| category   | VARCHAR   |
-| condition  | VARCHAR   |
-| location   | VARCHAR   |
-| quantity   | INTEGER   |
-| status     | VARCHAR   |
-| qr_code    | TEXT      |
-| created_at | TIMESTAMP |
-
----
-
-## borrowings
-
-| Field       | Type      |
-| ----------- | --------- |
-| id          | SERIAL    |
-| user_id     | INTEGER   |
-| item_id     | INTEGER   |
-| borrow_date | TIMESTAMP |
-| return_date | TIMESTAMP |
-| status      | VARCHAR   |
-
----
-
-# Cara Menjalankan Project
-
-## Clone Repository
+## 1. Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Ichsanpratamap/inventory_system_UAS_WebPro2_23552011205.git
+```
+
+Masuk ke folder project
+
+```bash
+cd inventory_system_UAS_WebPro2_23552011205
 ```
 
 ---
 
-## Backend
+# Menjalankan Backend
 
 Masuk ke folder backend
 
@@ -175,15 +76,19 @@ Install dependency
 npm install
 ```
 
-Buat file `.env`
+Pastikan PostgreSQL sudah berjalan dan file **.env** telah dikonfigurasi.
+
+Contoh konfigurasi:
 
 ```env
 PORT=5000
-DB_USER=postgres
-DB_PASSWORD=your_password
+
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=inventory_system
+DB_USER=postgres
+DB_PASSWORD=password
+DB_NAME=inventory_db
+
 JWT_SECRET=your_secret_key
 ```
 
@@ -193,17 +98,18 @@ Jalankan backend
 npm run dev
 ```
 
-Backend berjalan di
+Apabila berhasil akan muncul
 
-```
-http://localhost:5000
+```text
+Server running on port 5000
+Connected to PostgreSQL
 ```
 
 ---
 
-## Frontend
+# Menjalankan Frontend
 
-Masuk ke folder frontend
+Buka terminal baru kemudian masuk ke folder frontend
 
 ```bash
 cd frontend
@@ -215,13 +121,19 @@ Install dependency
 npm install
 ```
 
-Jalankan frontend
+Jalankan aplikasi React
 
 ```bash
 npm run dev
 ```
 
-Frontend berjalan di
+Apabila berhasil akan muncul
+
+```text
+Local: http://localhost:5173
+```
+
+Buka browser kemudian akses
 
 ```
 http://localhost:5173
@@ -229,61 +141,49 @@ http://localhost:5173
 
 ---
 
-# API Endpoint
+# Alur Penggunaan Aplikasi
 
-## Authentication
-
-| Method | Endpoint           |
-| ------ | ------------------ |
-| POST   | /api/auth/register |
-| POST   | /api/auth/login    |
-| GET    | /api/profile       |
-
----
-
-## Inventory
-
-| Method | Endpoint       |
-| ------ | -------------- |
-| GET    | /api/items     |
-| GET    | /api/items/:id |
-| POST   | /api/items     |
-| PUT    | /api/items/:id |
-| DELETE | /api/items/:id |
+1. Login menggunakan akun yang telah terdaftar.
+2. Setelah berhasil login akan masuk ke Dashboard.
+3. Tambahkan data inventaris baru menggunakan form Add Item.
+4. Data barang akan tampil pada Dashboard.
+5. Gunakan fitur:
+   - Detail
+   - Update
+   - Delete
+6. Scan QR Code untuk membuka halaman detail barang.
+7. Lakukan proses Borrow Item apabila barang dipinjam.
+8. Status barang akan berubah menjadi **Borrowed**.
 
 ---
+## Tampilan Aplikasi
 
-## Borrowing
+### Login
+<img width="959" height="476" alt="image" src="https://github.com/user-attachments/assets/db7810a2-88bd-4f07-a5b3-ba08843d48db" />
 
-| Method | Endpoint        |
-| ------ | --------------- |
-| POST   | /api/borrowings |
+### Dashboard
 
----
+<img width="958" height="439" alt="image" src="https://github.com/user-attachments/assets/8e9f7ee1-0302-47a8-91f5-277d959c1878" />
 
-# Alur Sistem
+<img width="959" height="440" alt="image" src="https://github.com/user-attachments/assets/a86a4b6c-3658-47af-818d-75a463e8b496" />
 
-1. User melakukan login.
-2. JWT Token disimpan pada Local Storage.
-3. User masuk ke Dashboard.
-4. User dapat menambah, mengubah, menghapus, dan melihat data barang.
-5. Setiap barang akan memiliki QR Code secara otomatis.
-6. QR Code dapat dipindai untuk melihat detail barang.
-7. Barang dapat dipinjam melalui fitur Borrow Item.
-8. Status barang berubah menjadi **Borrowed** dan riwayat peminjaman disimpan pada database.
 
----
+### Detail Barang
 
-# Pengembang
+<img width="198" height="389" alt="image" src="https://github.com/user-attachments/assets/9fbb0da1-e0ca-4c7b-8cdd-c81179185130" />
+<img width="221" height="407" alt="image" src="https://github.com/user-attachments/assets/c3651d07-ba00-4fe4-bba1-db9b31986eb1" />
 
-**Nama:** Ichsan Pratama Putra
 
-Universitas Teknologi Bandung
 
-Mata Kuliah: Web Programming 2
+### Scan QR Code
 
----
+<img width="452" height="478" alt="image" src="https://github.com/user-attachments/assets/f302cd60-f92a-4c00-8650-a244f986d9e0" />
 
-# Lisensi
+# Author
 
-Project ini dibuat untuk tugas akhir mata kuliah Web Programming 2.
+**Nama :** Ichsan Pratama Putra
+**NPM :** 23552011205
+
+**Mata Kuliah :** Web Programming 2
+
+**Universitas Teknologi Bandung**
