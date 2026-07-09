@@ -15,6 +15,8 @@ const [items, setItems] = useState([]);
 const [search, setSearch] =
 useState("");
 
+const [editingId, setEditingId] = useState(null);
+
 const [formData, setFormData] =
 useState({
 code: "",
@@ -58,35 +60,50 @@ setFormData({
 };
 
 const handleSubmit = async (e) => {
-e.preventDefault();
+  e.preventDefault();
 
-try {
-  await api.post(
-    "/items",
-    formData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  try {
+    if (editingId) {
+      await api.put(
+        `/items/${editingId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Item updated");
+    } else {
+      await api.post(
+        "/items",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Item added");
     }
-  );
 
-  alert("Item added");
+    setEditingId(null);
 
-  getItems();
+    setFormData({
+      code: "",
+      name: "",
+      category: "",
+      condition: "",
+      location: "",
+      quantity: "",
+    });
 
-  setFormData({
-    code: "",
-    name: "",
-    category: "",
-    condition: "",
-    location: "",
-    quantity: "",
-  });
-} catch (error) {
-  console.log(error);
-}
-
+    getItems();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const handleLogout = () => {
@@ -106,8 +123,45 @@ item.code
 .includes(search.toLowerCase())
 );
 
+const deleteItem = async (id) => {
+  const confirmDelete = window.confirm(
+    "Yakin ingin menghapus barang ini?"
+  );
+
+  
+  if (!confirmDelete) return;
+
+  try {
+    await api.delete(`/items/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    alert("Item berhasil dihapus");
+
+    getItems();
+  } catch (error) {
+    console.log(error);
+    alert("Gagal menghapus item");
+  }
+};
+
+const editItem = (item) => {
+   console.log("Edit item:", item);
+  setEditingId(item.id);
+
+  setFormData({
+    code: item.code,
+    name: item.name,
+    category: item.category,
+    condition: item.condition,
+    location: item.location,
+    quantity: item.quantity,
+  });
+};
 return ( <div className="p-8 bg-gray-100 min-h-screen"> <div className="flex justify-between items-center mb-6"> <h1 className="text-3xl font-bold">
-Inventory Dashboard </h1>
+Lab Inventory Dashboard </h1>
 
     <button
       onClick={handleLogout}
@@ -175,8 +229,8 @@ Inventory Dashboard </h1>
 
   <div className="bg-white p-6 rounded-xl shadow-md mb-8">
     <h2 className="text-2xl font-semibold mb-4">
-      Add Item
-    </h2>
+  {editingId ? "Update Item" : "Add Item"}
+</h2>
 
     <form
       onSubmit={handleSubmit}
@@ -237,11 +291,11 @@ Inventory Dashboard </h1>
       />
 
       <button
-        type="submit"
-        className="col-span-2 bg-blue-600 text-white p-3 rounded-lg"
-      >
-        Add Item
-      </button>
+  type="submit"
+  className="col-span-2 bg-blue-600 text-white p-3 rounded-lg"
+>
+  {editingId ? "Update Item" : "Add Item"}
+</button>
     </form>
   </div>
 
@@ -292,6 +346,31 @@ Inventory Dashboard </h1>
             className="mt-4 w-40"
           />
         )}
+
+        <div className="flex gap-2 mt-4">
+
+  <button
+    onClick={() => navigate(`/item/${item.id}`)}
+    className="bg-blue-500 text-white px-3 py-2 rounded-lg flex-1"
+  >
+    Detail
+  </button>
+
+  <button
+    onClick={() => editItem(item)}
+    className="bg-yellow-500 text-white px-3 py-2 rounded-lg flex-1"
+  >
+    Update
+  </button>
+
+  <button
+    onClick={() => deleteItem(item.id)}
+    className="bg-red-500 text-white px-3 py-2 rounded-lg flex-1"
+  >
+    Delete
+  </button>
+
+</div>
       </div>
     ))}
   </div>

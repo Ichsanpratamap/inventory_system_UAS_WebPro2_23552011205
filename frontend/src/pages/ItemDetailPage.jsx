@@ -42,26 +42,31 @@ Authorization: `Bearer ${token}`,
 };
 
 const borrowItem = async () => {
-try {
-await api.post(
-"/borrowings",
-{
-itemId: item.id,
-},
-{
-headers: {
-Authorization: `Bearer ${token}`,
-},
-}
-);
+  try {
+    await api.post(
+      "/borrowings",
+      {
+        item_id: item.id,
+        borrower_name: "Ichsan",
+        borrow_date: new Date().toISOString().split("T")[0],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  alert("Item borrowed");
+    alert("Item borrowed");
 
-  getItem();
-} catch (error) {
-  console.log(error);
-}
+    getItem();
+  } catch (error) {
+    console.log(error);
 
+    alert(
+      error.response?.data?.message || "Borrow gagal"
+    );
+  }
 };
 
 if (!item) {
@@ -106,11 +111,18 @@ return ( <div className="p-8"> <div className="bg-white p-8 rounded-xl shadow-md
     </div>
 
     <button
-      onClick={borrowItem}
-      className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg"
-    >
-      Borrow Item
-    </button>
+  onClick={borrowItem}
+  disabled={item.status === "borrowed"}
+  className={`mt-6 px-6 py-3 rounded-lg text-white ${
+    item.status === "borrowed"
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-blue-600"
+  }`}
+>
+  {item.status === "borrowed"
+    ? "Already Borrowed"
+    : "Borrow Item"}
+</button>
 
     {item.qr_code && (
       <img
